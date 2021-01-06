@@ -1,4 +1,5 @@
 import 'dart:io';
+
 import 'package:flutter_gherkin/src/flutter/flutter_run_process_handler.dart';
 import 'package:flutter_gherkin/src/flutter/flutter_test_configuration.dart';
 import 'package:gherkin/gherkin.dart';
@@ -77,7 +78,8 @@ class FlutterAppRunnerHook extends Hook {
         ..setKeepAppRunning(config.keepAppRunningAfterTests)
         ..setBuildFlavor(config.buildFlavor)
         ..setBuildMode(config.buildMode)
-        ..setDeviceTargetId(config.targetDeviceId);
+        ..setDeviceTargetId(config.targetDeviceId)
+        ..setExtraArgs(config.extraArgs);
 
       stdout.writeln(
           "Starting Flutter app under test '${config.targetAppPath}', this might take a few moments");
