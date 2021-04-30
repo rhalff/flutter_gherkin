@@ -56,8 +56,8 @@ class FlutterTestConfiguration extends TestConfiguration {
       ]
       ..targetAppPath = targetAppPath
       ..stepDefinitions = steps
-      ..restartAppBetweenScenarios = true
-      ..exitAfterTestRun = true;
+      ..restartAppBetweenScenarios = true;
+    // ..exitAfterTestRun = true;
   }
 
   /// restarts the application under test between each scenario.
