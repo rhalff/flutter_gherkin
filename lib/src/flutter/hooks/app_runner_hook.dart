@@ -9,7 +9,7 @@ import '../flutter_world.dart';
 /// A hook that manages running the target flutter application
 /// that is under test
 class FlutterAppRunnerHook extends Hook {
-  FlutterRunProcessHandler _flutterRunProcessHandler;
+  FlutterRunProcessHandler? _flutterRunProcessHandler;
   bool haveRunFirstScenario = false;
 
   @override
@@ -57,16 +57,17 @@ class FlutterAppRunnerHook extends Hook {
     Iterable<Tag> tags,
   ) async {
     if (world is FlutterWorld) {
-      world.setFlutterProcessHandler(_flutterRunProcessHandler);
+      world.setFlutterProcessHandler(_flutterRunProcessHandler!);
     }
   }
 
   Future<void> _runApp(FlutterTestConfiguration config) async {
-    if (config.runningAppProtocolEndpointUri != null &&
-        config.runningAppProtocolEndpointUri.isNotEmpty) {
+    final runningAppProtocolEndpointUri = config.runningAppProtocolEndpointUri;
+    if (runningAppProtocolEndpointUri != null &&
+        runningAppProtocolEndpointUri.isNotEmpty) {
       stdout.writeln(
           "Connecting to running Flutter app under test at '${config.runningAppProtocolEndpointUri}', this might take a few moments");
-      config.setObservatoryDebuggerUri(config.runningAppProtocolEndpointUri);
+      config.setObservatoryDebuggerUri(config.runningAppProtocolEndpointUri!);
     } else {
       _flutterRunProcessHandler = FlutterRunProcessHandler()
         ..setLogFlutterProcessOutput(config.logFlutterProcessOutput)
@@ -83,8 +84,8 @@ class FlutterAppRunnerHook extends Hook {
 
       stdout.writeln(
           "Starting Flutter app under test '${config.targetAppPath}', this might take a few moments");
-      await _flutterRunProcessHandler.run();
-      final observatoryUri = await _flutterRunProcessHandler
+      await _flutterRunProcessHandler!.run();
+      final observatoryUri = await _flutterRunProcessHandler!
           .waitForObservatoryDebuggerUri(config.flutterBuildTimeout);
       config.setObservatoryDebuggerUri(observatoryUri);
     }
@@ -93,7 +94,7 @@ class FlutterAppRunnerHook extends Hook {
   Future<void> _terminateApp() async {
     if (_flutterRunProcessHandler != null) {
       stdout.writeln('Terminating Flutter app under test');
-      await _flutterRunProcessHandler.terminate();
+      await _flutterRunProcessHandler!.terminate();
       _flutterRunProcessHandler = null;
     }
   }
@@ -101,7 +102,7 @@ class FlutterAppRunnerHook extends Hook {
   Future<void> _restartApp() async {
     if (_flutterRunProcessHandler != null) {
       stdout.writeln('Restarting Flutter app under test');
-      await _flutterRunProcessHandler.restart();
+      await _flutterRunProcessHandler!.restart();
     }
   }
 

@@ -1,8 +1,8 @@
 import 'dart:async';
 import 'dart:io';
 
-import 'package:gherkin/gherkin.dart';
 import 'package:flutter_driver/flutter_driver.dart';
+import 'package:gherkin/gherkin.dart';
 
 enum _FlutterDriverMessageLogLevel { info, warning, error }
 
@@ -31,7 +31,7 @@ class FlutterDriverReporter extends Reporter {
 
   @override
   Future<void> dispose() async {
-    driverLog = null;
+    // driverLog = null;
   }
 
   void _driverLogMessageHandler(String source, String message) {
