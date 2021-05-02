@@ -1,6 +1,6 @@
+import 'package:flutter_driver/flutter_driver.dart';
 import 'package:flutter_gherkin/src/flutter/flutter_world.dart';
 import 'package:flutter_gherkin/src/flutter/utils/driver_utils.dart';
-import 'package:flutter_driver/flutter_driver.dart';
 import 'package:gherkin/gherkin.dart';
 
 /// Opens the applications main drawer
@@ -21,11 +21,21 @@ StepDefinitionGeneric GivenOpenDrawer() {
         await context.world.driver.scroll(
             drawerFinder, -300.0, 0.0, const Duration(milliseconds: 300));
       } else if (!isOpen && action == 'open') {
-        await FlutterDriverUtils.tap(
-          context.world.driver,
-          find.byTooltip('Open navigation menu'),
-          timeout: context.configuration?.timeout,
-        );
+        final timeout = context.configuration.timeout;
+        final finder = find.byTooltip('Open navigation menu');
+
+        if (timeout != null) {
+          await FlutterDriverUtils.tap(
+            context.world.driver,
+            finder,
+            timeout: timeout,
+          );
+        } else {
+          await FlutterDriverUtils.tap(
+            context.world.driver,
+            finder,
+          );
+        }
       }
     },
   );

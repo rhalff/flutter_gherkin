@@ -5,9 +5,15 @@ StepDefinitionGeneric RestartAppStep() {
   return given<FlutterWorld>(
     'I restart the app',
     (context) async {
-      await context.world.restartApp(
-        timeout: context.configuration?.timeout,
-      );
+      final timeout = context.configuration.timeout;
+
+      if (timeout != null) {
+        await context.world.restartApp(
+          timeout: timeout,
+        );
+      } else {
+        await context.world.restartApp();
+      }
     },
   );
 }
