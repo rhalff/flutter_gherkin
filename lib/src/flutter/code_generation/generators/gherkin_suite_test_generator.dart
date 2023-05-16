@@ -1,8 +1,8 @@
 import 'dart:io';
 
+import 'package:analyzer/dart/element/element.dart';
 // ignore: implementation_imports
 import 'package:build/src/builder/build_step.dart';
-import 'package:analyzer/dart/element/element.dart';
 import 'package:flutter_gherkin/src/flutter/code_generation/annotations/gherkin_full_test_suite_annotation.dart';
 import 'package:gherkin/gherkin.dart';
 import 'package:glob/glob.dart';
@@ -35,12 +35,14 @@ class _CustomGherkinIntegrationTestRunner extends GherkinIntegrationTestRunner {
     required Timeout scenarioExecutionTimeout,
     AppLifecyclePumpHandlerFn? appLifecyclePumpHandler,
     LiveTestWidgetsFlutterBindingFramePolicy? framePolicy,
+    IntegrationTestWidgetsFlutterBinding Function()? bindingInitializer,
   }) : super(
           configuration: configuration,
           appMainFunction: appMainFunction,
           scenarioExecutionTimeout: scenarioExecutionTimeout,
           appLifecyclePumpHandler: appLifecyclePumpHandler,
           framePolicy: framePolicy,
+          bindingInitializer: bindingInitializer,
         );
 
   @override
@@ -57,6 +59,7 @@ Future<void> executeTestSuite({
   Timeout scenarioExecutionTimeout = const Timeout(const Duration(minutes: 10)),
   AppLifecyclePumpHandlerFn? appLifecyclePumpHandler,
   LiveTestWidgetsFlutterBindingFramePolicy? framePolicy,
+  IntegrationTestWidgetsFlutterBinding Function()? bindingInitializer,
 }) =>
     _CustomGherkinIntegrationTestRunner(
     configuration: configuration,
@@ -64,6 +67,7 @@ Future<void> executeTestSuite({
     appLifecyclePumpHandler: appLifecyclePumpHandler,
     scenarioExecutionTimeout: scenarioExecutionTimeout,
     framePolicy: framePolicy,
+    bindingInitializer: bindingInitializer,
   ).run();
 }
 ''';

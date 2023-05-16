@@ -1,9 +1,9 @@
-import 'package:flutter_gherkin/flutter_gherkin.dart';
-import 'package:gherkin/gherkin.dart';
-import 'package:flutter/widgets.dart';
-import 'package:flutter_test/flutter_test.dart';
-import 'package:integration_test/integration_test.dart';
 import 'package:collection/collection.dart';
+import 'package:flutter/widgets.dart';
+import 'package:flutter_gherkin/flutter_gherkin.dart';
+import 'package:flutter_test/flutter_test.dart';
+import 'package:gherkin/gherkin.dart';
+import 'package:integration_test/integration_test.dart';
 
 enum AppLifecyclePhase {
   initialisation,
@@ -40,6 +40,7 @@ abstract class GherkinIntegrationTestRunner {
   final Timeout scenarioExecutionTimeout;
   final LiveTestWidgetsFlutterBindingFramePolicy? framePolicy;
   final AggregatedReporter _reporter = AggregatedReporter();
+  final IntegrationTestWidgetsFlutterBinding Function()? bindingInitializer;
 
   late final Iterable<ExecutableStep>? _executableSteps;
   late final Iterable<CustomParameter>? _customParameters;
@@ -65,6 +66,7 @@ abstract class GherkinIntegrationTestRunner {
     required this.scenarioExecutionTimeout,
     this.appLifecyclePumpHandler,
     this.framePolicy,
+    this.bindingInitializer,
   }) {
     configuration.prepare();
     _registerReporters(configuration.reporters);
@@ -78,7 +80,9 @@ abstract class GherkinIntegrationTestRunner {
   }
 
   Future<void> run() async {
-    _binding = IntegrationTestWidgetsFlutterBinding.ensureInitialized();
+    _binding = bindingInitializer != null
+        ? bindingInitializer!()
+        : IntegrationTestWidgetsFlutterBinding.ensureInitialized();
 
     _binding.framePolicy = framePolicy ?? _binding.framePolicy;
 
